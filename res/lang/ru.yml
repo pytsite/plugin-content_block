@@ -1,0 +1,18 @@
+blocks: 'Блоки'
+uid: 'UID'
+title: 'Заголовок'
+author: 'Автор'
+block_already_exists: 'Блок с таким же UID уже существует'
+
+odm_ui_browser_title_content_block: 'Блоки'
+odm_ui_form_title_create_content_block: 'Создание блока'
+odm_ui_form_title_modify_content_block: 'Изменение блока'
+odm_ui_form_title_delete_content_block: 'Удаление блоков'
+
+odm_auth_create_content_block: 'Создание блоков'
+odm_auth_view_own_content_block: 'Просмотр СВОИХ блоков'
+odm_auth_view_content_block: 'Просмотр ВСЕХ блоков'
+odm_auth_modify_own_content_block: 'Изменение СВОИХ блоков'
+odm_auth_modify_content_block: 'Изменение ЛЮБЫХ блоков'
+odm_auth_delete_own_content_block: 'Удаление СВОИХ блоков'
+odm_auth_delete_content_block: 'Удаление ЛЮБЫХ блоков'

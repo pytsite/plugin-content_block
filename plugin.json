@@ -1,0 +1,19 @@
+{
+  "description": {
+    "en": "Content blocks",
+    "ru": "Блоки контента",
+    "uk": "Блоки контенту"
+  },
+  "url": "https://github.com/pytsite/plugin-content_block",
+  "author": {
+    "name": "Alexander Shepetko",
+    "email": "a@shepetko.com",
+    "url": "https://shepetko.com"
+  },
+  "requires": {
+    "packages": [],
+    "plugins": [
+      "content"
+    ]
+  }
+}
