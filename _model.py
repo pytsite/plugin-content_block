@@ -14,7 +14,14 @@ class Block(_content.model.Content):
         """
         super()._setup_fields()
 
+        self.get_field('body').tidyfy_html = False
+
+        self.remove_field('description')
+        self.remove_field('author')
+        self.remove_field('status')
+
         self.define_field(_odm.field.String('uid', required=True))
+        self.define_field(_odm.field.String('type', required=True, default='text'))
 
     def _setup_indexes(self):
         super()._setup_indexes()
@@ -25,17 +32,37 @@ class Block(_content.model.Content):
     def uid(self) -> str:
         return self.f_get('uid')
 
+    @property
+    def b_type(self) -> str:
+        return self.f_get('type')
+
+    @classmethod
+    def odm_auth_permissions(cls) -> tuple:
+        return 'create', 'modify'
+
+    @classmethod
+    def odm_ui_creation_allowed(cls) -> bool:
+        """Hook.
+        """
+        return False
+
     @classmethod
     def odm_ui_browser_setup(cls, browser: _odm_ui.Browser):
+        def finder_adjust(f: _odm.Finder):
+            from . import _api
+            f.inc('language', (_lang.get_current(), 'n'))
+            f.inc('uid', [b[0] for b in _api.get_all()])  # Select only defined blocks
+
         _content.model.Content.odm_ui_browser_setup(browser)
+        browser.finder_adjust = finder_adjust
+
         browser.data_fields = [
-            ('title', 'content_block@title'),
             ('uid', 'content_block@uid'),
-            ('author', 'content_block@author')
+            ('title', 'content_block@title'),
         ]
 
     def odm_ui_browser_row(self) -> tuple:
-        return self.title, self.uid, self.author.full_name
+        return self.uid, _lang.t(self.title) if '@' in self.title else self.title
 
     def odm_ui_m_form_setup_widgets(self, frm: _form.Form):
         """Hook.
@@ -49,30 +76,20 @@ class Block(_content.model.Content):
             label=self.t('uid'),
             value=self.uid,
             required=True,
+            enabled=False,
         ))
 
-    def odm_ui_m_form_validate(self, frm: _form.Form):
-        from . import _api, _error
+        # Title
+        frm.get_widget('title').enabled = False
 
-        block_uid = frm.get_widget('uid').value
+        # Text blocks
+        if self.b_type == 'text':
+            frm.remove_widget('images')
+            frm.remove_widget('video_links')
 
-        if self.is_new:
-            try:
-                _api.get_block(block_uid)
-                raise _form.error.ValidationError({
-                    'uid': _lang.t('content_block@block_already_exists')
-                })
-            except _error.BlockNotFound:
-                pass
-        else:
-            existing_uid = self.uid
-            new_uid = block_uid
-
-            if new_uid != existing_uid:
-                try:
-                    _api.get_block(new_uid)
-                    raise _form.error.ValidationError({
-                        'uid': _lang.t('content_block@block_already_exists')
-                    })
-                except _error.BlockNotFound:
-                    pass
+            frm.replace_widget('body', _widget.input.TextArea(
+                uid='body',
+                label=self.t('body'),
+                value=self.body,
+                rows=15,
+            ))

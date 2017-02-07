@@ -1,7 +1,7 @@
 """PytSite Content Block Plugin.
 """
 from . import _error as error
-from ._api import get_block
+from ._api import is_defined, define, get, get_all
 
 __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
@@ -20,14 +20,15 @@ def _init():
     content.register_model('content_block', _model.Block, 'content_block@blocks', 1000, 'fa fa-th')
 
     # Tpl global callback
-    def tpl_global_render_block(*args, **kwargs) -> str:
+    def tpl_render_block(*args, **kwargs) -> str:
         try:
-            return get_block(*args, **kwargs).body
-        except error.BlockNotFound:
+            return get(*args, **kwargs).body
+        except error.BlockNotDefined:
             return ''
 
     # Tpl globals
-    tpl.register_global('content_block', tpl_global_render_block)
+    tpl.register_global('get_content_block', get)
+    tpl.register_global('content_block', tpl_render_block)
 
 
 _init()
