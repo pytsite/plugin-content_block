@@ -17,26 +17,24 @@ def is_defined(uid: str, language: str = 'n') -> bool:
     return (uid, language) in _blocks
 
 
-def define(uid: str, title: str, language: str = 'n', b_type: str = 'html') -> _model.Block:
+def define(uid: str, title: str, language: str = 'n', content_type: str = 'html') -> _model.Block:
     """Define block.
     """
     if is_defined(uid, language):
         raise _error.BlockAlreadyDefined("Block '{}' for language '{}' is already defined".format(uid, language))
 
-    if b_type not in ('text', 'html'):
-        raise ValueError('Invalid block type: {}'.format(b_type))
+    if content_type not in ('text', 'html'):
+        raise ValueError('Invalid content type: {}'.format(content_type))
 
     _blocks.append((uid, language))
 
     try:
         block = get(uid, language)
     except _error.BlockNotFound:
+        _auth.switch_user_to_system()
         block = _content.dispense('content_block')
-
-    _auth.switch_user_to_system()
-    with block:
         block.f_set('uid', uid).f_set('language', language).f_set('title', title).save()
-    _auth.restore_user()
+        _auth.restore_user()
 
     return block
 

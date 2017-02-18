@@ -21,7 +21,7 @@ class Block(_content.model.Content):
         self.remove_field('status')
 
         self.define_field(_odm.field.String('uid', required=True))
-        self.define_field(_odm.field.String('type', required=True, default='text'))
+        self.define_field(_odm.field.String('content_type', required=True, default='html'))
 
     def _setup_indexes(self):
         super()._setup_indexes()
@@ -33,8 +33,8 @@ class Block(_content.model.Content):
         return self.f_get('uid')
 
     @property
-    def b_type(self) -> str:
-        return self.f_get('type')
+    def content_type(self) -> str:
+        return self.f_get('content_type')
 
     @classmethod
     def odm_auth_permissions(cls) -> tuple:
@@ -79,11 +79,8 @@ class Block(_content.model.Content):
             enabled=False,
         ))
 
-        # Title
-        frm.get_widget('title').enabled = False
-
         # Text blocks
-        if self.b_type == 'text':
+        if self.content_type == 'text':
             frm.remove_widget('images')
             frm.remove_widget('video_links')
 
