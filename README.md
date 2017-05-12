@@ -4,6 +4,10 @@
 ## Changelog
 
 
+### 0.3.1 (2017-05-12)
+Fixed error in `get()` API method.
+
+
 ### 0.3 (2017-05-12)
 - Refactored.
 - Fixed **uid** field behaviour. 

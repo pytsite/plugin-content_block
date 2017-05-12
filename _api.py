@@ -49,7 +49,10 @@ def get(uid: str, language: str = None) -> _model.Block:
     if not block:
         raise _error.BlockNotFound("Block '{}' for language '{}' is not found".format(uid, language))
 
-    block.content_type = _blocks[(uid, language)]
+    try:
+        block.content_type = _blocks[(uid, language)]
+    except KeyError:
+        block.content_type = _blocks[(uid, 'n')]
 
     return block
 
