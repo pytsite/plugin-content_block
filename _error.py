@@ -1,4 +1,4 @@
-"""PytSite Content Block Plugin Errors.
+"""PytSite Content Block Plugin Errors
 """
 
 __author__ = 'Alexander Shepetko'

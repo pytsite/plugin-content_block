@@ -4,6 +4,13 @@
 ## Changelog
 
 
+### 0.3 (2017-05-12)
+- Refactored.
+- Fixed **uid** field behaviour. 
+- Changed signature of `define()` API method.
+- Valid block's content type **html** renamed to **wysiwyg**.
+
+
 ### 0.2.2 (2017-02-18)
 - Block's title is editable now.
 - `model.Block.b_type` renamed to `content_type`.

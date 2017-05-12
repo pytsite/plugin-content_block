@@ -1,5 +1,7 @@
 """PytSite Content Block Plugin Models.
 """
+from typing import Union as _Union
+from bson.objectid import ObjectId as _ObjectId
 from pytsite import odm as _odm, form as _form, widget as _widget, odm_ui as _odm_ui, lang as _lang
 from plugins import content as _content
 
@@ -9,6 +11,13 @@ __license__ = 'MIT'
 
 
 class Block(_content.model.Content):
+    def __init__(self, model: str, obj_id: _Union[str, _ObjectId] = None):
+        """Init.
+        """
+        super().__init__(model, obj_id)
+
+        self._content_type = 'text'
+
     def _setup_fields(self):
         """Hook.
         """
@@ -20,21 +29,24 @@ class Block(_content.model.Content):
         self.remove_field('author')
         self.remove_field('status')
 
-        self.define_field(_odm.field.String('uid', required=True))
-        self.define_field(_odm.field.String('content_type', required=True, default='html'))
+        self.define_field(_odm.field.String('block_uid', required=True))
 
     def _setup_indexes(self):
         super()._setup_indexes()
 
-        self.define_index([('uid', _odm.I_ASC), ('language', _odm.I_ASC)], True)
+        self.define_index([('block_uid', _odm.I_ASC), ('language', _odm.I_ASC)], True)
 
     @property
-    def uid(self) -> str:
-        return self.f_get('uid')
+    def block_uid(self) -> str:
+        return self.f_get('block_uid')
 
     @property
     def content_type(self) -> str:
-        return self.f_get('content_type')
+        return self._content_type
+
+    @content_type.setter
+    def content_type(self, value: str):
+        self._content_type = value
 
     @classmethod
     def odm_auth_permissions(cls) -> tuple:
@@ -51,18 +63,18 @@ class Block(_content.model.Content):
         def finder_adjust(f: _odm.Finder):
             from . import _api
             f.inc('language', (_lang.get_current(), 'n'))
-            f.inc('uid', [b[0] for b in _api.get_all()])  # Select only defined blocks
+            f.inc('block_uid', [b[0] for b in _api.get_blocks()])  # Select only defined blocks
 
         _content.model.Content.odm_ui_browser_setup(browser)
         browser.finder_adjust = finder_adjust
 
         browser.data_fields = [
-            ('uid', 'content_block@uid'),
+            ('block_uid', 'content_block@uid'),
             ('title', 'content_block@title'),
         ]
 
     def odm_ui_browser_row(self) -> tuple:
-        return self.uid, _lang.t(self.title) if '@' in self.title else self.title
+        return self.block_uid, _lang.t(self.title) if '@' in self.title else self.title
 
     def odm_ui_m_form_setup_widgets(self, frm: _form.Form):
         """Hook.
@@ -71,10 +83,10 @@ class Block(_content.model.Content):
 
         # ID
         frm.add_widget(_widget.input.Text(
-            uid='uid',
+            uid='block_uid',
             weight=50,
             label=self.t('uid'),
-            value=self.uid,
+            value=self.block_uid,
             required=True,
             enabled=False,
         ))
