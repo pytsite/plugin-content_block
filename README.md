@@ -4,6 +4,10 @@
 ## Changelog
 
 
+### 0.3.2 (2017-08-27)
+`plugin.json` updated.
+
+
 ### 0.3.1 (2017-05-12)
 Fixed error in `get()` API method.
 
