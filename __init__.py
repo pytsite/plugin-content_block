@@ -1,7 +1,7 @@
 """PytSite Content Block Plugin
 """
 from . import _error as error
-from ._api import is_defined, define, get, get_blocks
+from ._api import is_defined, define, get
 
 __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'

@@ -1,6 +1,6 @@
 {
   "name": "plugins.content_block",
-  "version": "0.3.2",
+  "version": "0.4",
   "description": {
     "en": "Content blocks",
     "ru": "Блоки контента",

@@ -4,6 +4,12 @@
 ## Changelog
 
 
+### 0.4 (2017-10-02)
+- Removed `get_blocks()` API function.
+- Fixed error in wysiwyg-blocks work.
+- Slightly refactored.
+
+
 ### 0.3.2 (2017-08-27)
 `plugin.json` updated.
 

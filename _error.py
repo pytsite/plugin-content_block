@@ -14,5 +14,5 @@ class BlockAlreadyDefined(Exception):
     pass
 
 
-class BlockNotFound(Exception):
+class BlockDataNotFound(Exception):
     pass
