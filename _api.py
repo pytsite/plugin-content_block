@@ -1,7 +1,7 @@
 """PytSite Content Block Plugin API
 """
-from pytsite import lang as _lang, auth as _auth
-from plugins import content as _content
+from pytsite import lang as _lang
+from plugins import auth as _auth, content as _content
 from . import _model, _error
 
 __author__ = 'Alexander Shepetko'

@@ -1,8 +1,8 @@
 {
-  "name": "plugins.content_block",
-  "version": "0.4",
+  "name": "content_block",
+  "version": "1.0",
   "description": {
-    "en": "Content blocks",
+    "en": "Content Block",
     "ru": "Блоки контента",
     "uk": "Блоки контенту"
   },
@@ -15,7 +15,12 @@
   "requires": {
     "packages": [],
     "plugins": [
-      "content"
+      "auth",
+      "content",
+      "form",
+      "odm",
+      "odm_ui",
+      "widget"
     ]
   }
 }

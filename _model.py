@@ -1,9 +1,8 @@
 """PytSite Content Block Plugin Models
 """
 from frozendict import frozendict as _frozendict
-from pytsite import odm as _odm, form as _form, widget as _widget, odm_ui as _odm_ui, lang as _lang, \
-    validation as _validation
-from plugins import content as _content
+from pytsite import lang as _lang
+from plugins import widget as _widget, odm as _odm, content as _content, odm_ui as _odm_ui, form as _form
 
 __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
