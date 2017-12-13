@@ -1,14 +1,18 @@
 """PytSite Content Block Plugin
 """
-from . import _error as error
-from ._api import is_defined, define, get
-
 __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
 
+from pytsite import plugman as _plugman
 
-def _init():
+if _plugman.is_installed(__name__):
+    # Public API
+    from . import _error as error
+    from ._api import is_defined, define, get
+
+
+def plugin_load():
     from pytsite import tpl, lang
     from plugins import content
     from . import _model, _api
@@ -21,6 +25,3 @@ def _init():
 
     # Tpl globals
     tpl.register_global('content_block', get)
-
-
-_init()
