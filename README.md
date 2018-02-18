@@ -4,6 +4,12 @@
 ## Changelog
 
 
+### 1.2 (2018-02-18)
+
+- Admin's menu moved from 'content' section to 'settings'.
+- `odm_auth`'s permissions set updated.
+
+
 ### 1.1 (2017-12-13)
 
 Support for PytSite-7.0.

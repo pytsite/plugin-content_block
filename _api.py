@@ -1,12 +1,12 @@
 """PytSite Content Block Plugin API
 """
-from pytsite import lang as _lang
-from plugins import auth as _auth, content as _content
-from . import _model, _error
-
 __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
+
+from pytsite import lang as _lang
+from plugins import auth as _auth, content as _content
+from . import _model, _error
 
 _VALID_BLOCK_TYPES = ('text', 'wysiwyg')
 _BLOCKS = {}

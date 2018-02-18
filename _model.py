@@ -1,12 +1,12 @@
 """PytSite Content Block Plugin Models
 """
-from frozendict import frozendict as _frozendict
-from pytsite import lang as _lang
-from plugins import widget as _widget, odm as _odm, content as _content, odm_ui as _odm_ui, form as _form
-
 __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
+
+from frozendict import frozendict as _frozendict
+from pytsite import lang as _lang
+from plugins import widget as _widget, odm as _odm, content as _content, odm_ui as _odm_ui, form as _form
 
 
 class Block(_content.model.Content):
@@ -47,10 +47,16 @@ class Block(_content.model.Content):
         return self.f_get('data')
 
     @classmethod
+    def odm_auth_permissions_group(cls) -> str:
+        """Get model permission group name
+        """
+        return 'content_block'
+
+    @classmethod
     def odm_auth_permissions(cls) -> tuple:
         """Hook
         """
-        return 'create', 'modify'
+        return 'modify',
 
     @classmethod
     def odm_ui_creation_allowed(cls) -> bool:
@@ -74,10 +80,13 @@ class Block(_content.model.Content):
             ('title', 'content_block@title'),
         ]
 
-    def odm_ui_browser_row(self) -> tuple:
+    def odm_ui_browser_row(self) -> dict:
         """Hook
         """
-        return self.block_uid, _lang.t(self.title) if '@' in self.title else self.title
+        return {
+            'block_uid': self.block_uid,
+            'title': _lang.t(self.title) if '@' in self.title else self.title,
+        }
 
     def odm_ui_m_form_setup_widgets(self, frm: _form.Form):
         """Hook
