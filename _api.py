@@ -12,18 +12,25 @@ _VALID_BLOCK_TYPES = ('text', 'wysiwyg')
 _BLOCKS = {}
 
 
-def is_defined(uid: str, language: str = 'n') -> bool:
-    """Check whether block is defined.
+def is_defined(uid: str, language: str = None) -> bool:
+    """Check whether block is defined
     """
-    return (uid, language) in _BLOCKS
+    if not language:
+        language = _lang.get_current()
+
+    if language not in _lang.langs():
+        raise ValueError("Language '{}' is not defined".format(language))
+
+    return (uid, language or _lang.get_current()) in _BLOCKS
 
 
-def define(uid: str, title: str, content_type: str = 'wysiwyg', language: str = 'n') -> _model.Block:
+def define(uid: str, title: str, content_type: str = 'wysiwyg', language: str = None) -> _model.Block:
     """Define a block
     """
     # Check whether a block is already defined
     if is_defined(uid, language):
-        raise _error.BlockAlreadyDefined("Block '{}' for language '{}' is already defined".format(uid, language))
+        raise _error.BlockAlreadyDefined("Block '{}' for language '{}' is already defined".
+                                         format(uid, language or _lang.get_current()))
 
     # Check block's content type
     if content_type not in _VALID_BLOCK_TYPES:
@@ -59,9 +66,13 @@ def define(uid: str, title: str, content_type: str = 'wysiwyg', language: str = 
 def get(uid: str, language: str = None) -> _model.Block:
     """Load a block entity from the database
     """
-    language = language or _lang.get_current()
+    if not language:
+        language = _lang.get_current()
 
-    block = _content.find('content_block', language='*').inc('language', (language, 'n')).eq('block_uid', uid).first()
+    if language not in _lang.langs():
+        raise ValueError("Language '{}' is not defined".format(language))
+
+    block = _content.find('content_block', language=language).eq('block_uid', uid).first()
 
     if not block:
         raise _error.BlockDataNotFound("Block '{}' for language '{}' is not found in database".format(uid, language))
@@ -70,6 +81,6 @@ def get(uid: str, language: str = None) -> _model.Block:
 
 
 def get_defined() -> dict:
-    """Get all registered block types
+    """Get all defined blocks
     """
     return _BLOCKS

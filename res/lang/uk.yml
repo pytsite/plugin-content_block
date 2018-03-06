@@ -1,6 +1,9 @@
 blocks: 'Блоки'
 uid: 'UID'
 title: 'Заголовок'
+enabled: 'Увімкнений'
+word_yes: 'Так'
+word_no: 'Ні'
 
 odm_ui_browser_title_content_block: 'Блоки'
 odm_ui_form_title_modify_content_block: 'Зміна блоку'

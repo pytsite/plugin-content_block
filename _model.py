@@ -5,7 +5,6 @@ __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
 
 from frozendict import frozendict as _frozendict
-from pytsite import lang as _lang
 from plugins import widget as _widget, odm as _odm, content as _content, odm_ui as _odm_ui, form as _form
 
 
@@ -24,6 +23,7 @@ class Block(_content.model.Content):
         self.remove_field('author')
         self.remove_field('status')
 
+        self.define_field(_odm.field.Bool('enabled', default=True))
         self.define_field(_odm.field.String('block_uid', required=True))
         self.define_field(_odm.field.String('content_type', required=True, default='wysiwyg'))
 
@@ -35,16 +35,36 @@ class Block(_content.model.Content):
         self.define_index([('block_uid', _odm.I_ASC), ('language', _odm.I_ASC)], True)
 
     @property
+    def enabled(self) -> bool:
+        return self.f_get('enabled')
+
+    @enabled.setter
+    def enabled(self, value: bool):
+        self.f_set('enabled', value)
+
+    @property
     def block_uid(self) -> str:
         return self.f_get('block_uid')
+
+    @block_uid.setter
+    def block_uid(self, value: str):
+        self.f_set('block_uid', value)
 
     @property
     def content_type(self) -> str:
         return self.f_get('content_type')
 
+    @content_type.setter
+    def content_type(self, value: str):
+        self.f_set('content_type', value)
+
     @property
     def data(self) -> _frozendict:
         return self.f_get('data')
+
+    @data.setter
+    def data(self, value: str):
+        self.f_set('data', value)
 
     @classmethod
     def odm_auth_permissions_group(cls) -> str:
@@ -69,29 +89,42 @@ class Block(_content.model.Content):
     def odm_ui_browser_setup(cls, browser: _odm_ui.Browser):
         def finder_adjust(f: _odm.Finder):
             from . import _api
-            f.inc('language', (_lang.get_current(), 'n'))
             f.inc('block_uid', [b[0] for b in _api.get_defined()])  # Select only defined blocks
 
-        _content.model.Content.odm_ui_browser_setup(browser)
+        super().odm_ui_browser_setup(browser)
         browser.finder_adjust = finder_adjust
 
         browser.data_fields = [
             ('block_uid', 'content_block@uid'),
             ('title', 'content_block@title'),
+            ('enabled', 'content_block@enabled'),
         ]
 
     def odm_ui_browser_row(self) -> dict:
         """Hook
         """
+        if self.enabled:
+            enabled = '<span class="label label-primary">{}</span>'.format(self.t('word_yes'))
+        else:
+            enabled = '<span class="label label-default">{}</span>'.format(self.t('word_no'))
+
         return {
             'block_uid': self.block_uid,
-            'title': _lang.t(self.title) if '@' in self.title else self.title,
+            'title': self.title,
+            'enabled': enabled,
         }
 
     def odm_ui_m_form_setup_widgets(self, frm: _form.Form):
         """Hook
         """
         super().odm_ui_m_form_setup_widgets(frm)
+
+        frm.add_widget(_widget.select.Checkbox(
+            uid='enabled',
+            weight=5,
+            label=self.t('enabled'),
+            value=self.enabled,
+        ))
 
         # ID
         frm.add_widget(_widget.input.Text(

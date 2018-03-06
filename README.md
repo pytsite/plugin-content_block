@@ -4,6 +4,13 @@
 ## Changelog
 
 
+### 2.0 (2018-03-06)
+
+- New field `Block.enabled` added.
+- `tpl`'s global `content_block` removed.
+- Fields' setters added.
+
+
 ### 1.2 (2018-02-18)
 
 - Admin's menu moved from 'content' section to 'settings'.
