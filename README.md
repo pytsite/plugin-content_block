@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.0.1 (2018-04-25)
+
+Permissions issue fixed.
+
+
 ### 2.0 (2018-03-06)
 
 - New field `Block.enabled` added.

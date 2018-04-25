@@ -44,21 +44,25 @@ def define(uid: str, title: str, content_type: str = 'wysiwyg', language: str = 
 
         # Update content type if it was changed
         if block.content_type != content_type:
-            _auth.switch_user_to_system()
-            block.f_set('content_type', content_type).save()
-            _auth.restore_user()
+            try:
+                _auth.switch_user_to_system()
+                block.f_set('content_type', content_type).save()
+            finally:
+                _auth.restore_user()
 
     except _error.BlockDataNotFound:
         # Block is not found in the database, create it
-        _auth.switch_user_to_system()
-        block = _content.dispense('content_block')
-        block \
-            .f_set('block_uid', uid) \
-            .f_set('content_type', content_type) \
-            .f_set('language', language) \
-            .f_set('title', title) \
-            .save()
-        _auth.restore_user()
+        try:
+            _auth.switch_user_to_system()
+            block = _content.dispense('content_block')
+            block \
+                .f_set('block_uid', uid) \
+                .f_set('content_type', content_type) \
+                .f_set('language', language) \
+                .f_set('title', title) \
+                .save()
+        finally:
+            _auth.restore_user()
 
     return block
 
