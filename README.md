@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.1 (2018-06-16)
+
+Support of `content-4.9`.
+
+
 ### 2.0.1 (2018-04-25)
 
 Permissions issue fixed.

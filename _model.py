@@ -22,6 +22,7 @@ class Block(_content.model.Content):
         self.remove_field('description')
         self.remove_field('author')
         self.remove_field('status')
+        self.remove_field('publish_time')
 
         self.define_field(_odm.field.Bool('enabled', default=True))
         self.define_field(_odm.field.String('block_uid', required=True))

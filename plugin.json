@@ -1,6 +1,6 @@
 {
   "name": "content_block",
-  "version": "2.0.1",
+  "version": "2.1",
   "description": {
     "en": "Content Block",
     "ru": "Блоки контента",
@@ -15,7 +15,7 @@
   "requires": {
     "plugins": [
       "auth",
-      "content",
+      "content>=4.9",
       "form",
       "font_awesome",
       "odm",
